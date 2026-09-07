@@ -1,4 +1,4 @@
-package com.example.url_shortener.service;
+package com.example.urlshortener.service;
 
 import com.example.urlshortener.model.Url;
 import com.example.urlshortener.repository.UrlRepository;

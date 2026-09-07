@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle ./gradle
-RUN ./gradlew --no-daemon build || true
+#RUN ./gradlew --no-daemon build || true
 
 COPY src ./src
 RUN ./gradlew --no-daemon clean build -x test

@@ -1,4 +1,4 @@
-package com.example.url_shortener.controller;
+package com.example.urlshortener.controller;
 
 import com.example.urlshortener.model.Url;
 import com.example.urlshortener.service.UrlService;
