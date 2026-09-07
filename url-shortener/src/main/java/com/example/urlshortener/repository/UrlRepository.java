@@ -1,4 +1,11 @@
-package com.example.urlshortener.model;
+package com.example.urlshortener.repository;
 
-public interface UrlRepository {
+import com.example.urlshortener.model.Url;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UrlRepository extends JpaRepository<Url, Long> {
+
+    Optional<Url> findByUrlAlias(String urlAlias);
 }
