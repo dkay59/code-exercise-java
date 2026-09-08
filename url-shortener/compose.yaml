@@ -14,6 +14,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: rootpass
     ports:
       - "8080:8080"
+      - "5005:5005"
     networks:
       - appnet
 

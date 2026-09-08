@@ -15,5 +15,8 @@ WORKDIR /app
 
 COPY --from=build /app/build/libs/*.jar app.jar
 
+ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
 EXPOSE 8080
+EXPOSE 5005
 ENTRYPOINT ["java", "-jar", "app.jar"]

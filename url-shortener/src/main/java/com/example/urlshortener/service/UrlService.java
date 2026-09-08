@@ -3,32 +3,55 @@ package com.example.urlshortener.service;
 import com.example.urlshortener.model.Url;
 import com.example.urlshortener.repository.UrlRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
+
 
 @Service
 public class UrlService {
 
-    private final UrlRepository urlRepository;
+    private final UrlRepository repo;
 
-    public UrlService(UrlRepository urlRepository) {
-        this.urlRepository = urlRepository;
+    public UrlService(UrlRepository repo) {
+        this.repo = repo;
     }
 
-    public List<Url> getAll() {
-        return urlRepository.findAll();
+    public Url create(String fullUrl, String customAlias) {
+        String alias = (customAlias != null && !customAlias.isBlank())
+                ? customAlias
+                : UUID.randomUUID().toString().substring(0, 8);
+
+        if (repo.findByAlias(alias).isPresent()) {
+            throw new IllegalArgumentException("Alias already taken");
+        }
+
+        Url url = new Url();
+        url.setFullUrl(fullUrl);
+        url.setAlias(alias);
+
+        return repo.save(url);
     }
 
-    public Optional<Url> getByAlias(String alias) {
-        return urlRepository.findByUrlAlias(alias);
+    @Transactional(readOnly = true)
+    public Optional<Url> get(String alias) {
+        return repo.findByAlias(alias);
     }
 
-    public Url create(String url, String alias, String title) {
-        Url entity = new Url();
-        entity.setUrl(url);
-        entity.setUrlAlias(alias);
-        entity.setUrlTitle(title);
-        return urlRepository.save(entity);
+    @Transactional
+    public void delete(String alias) {
+        if (!repo.findByAlias(alias).isPresent()) {
+            throw new NoSuchElementException("Alias not found");
+        }
+        repo.deleteByAlias(alias);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Url> list() {
+        return repo.findAll();
     }
 }
+

@@ -1,7 +1,5 @@
 CREATE TABLE url (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    url TEXT NOT NULL,
-    url_alias TEXT,
-    url_title TEXT,
+    fullUrl VARCHAR(255) NOT NULL DEFAULT "www.example.com",
+    alias VARCHAR(255) PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
