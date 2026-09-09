@@ -38,8 +38,18 @@ public class UrlController {
     public ResponseEntity<?> redirect(@PathVariable String alias) {
         return service.get(alias)
                 .map(
+                        u -> ResponseEntity.status(302).header("Location", u.getFullUrl())
+                                .build()
+                )
+                .orElse(ResponseEntity.status(404).body(null));
+    }
+
+    @GetMapping("/get/{alias}")
+    public ResponseEntity<?> get(@PathVariable String alias) {
+        return service.get(alias)
+                .map(
                         u -> ResponseEntity.status(302)
-                        .body(new ShortenRequest(u.getFullUrl(),u.getAlias()))
+                                .body(new ShortenRequest(u.getFullUrl(),u.getAlias()))
                 )
                 .orElse(ResponseEntity.status(404).body(null));
     }

@@ -21,6 +21,10 @@ public class UrlService {
     }
 
     public Url create(String fullUrl, String customAlias) {
+        // Normalize missing protocol
+        if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://"))
+            fullUrl = "https://" + fullUrl;
+
         String alias = (customAlias != null && !customAlias.isBlank())
                 ? customAlias
                 : UUID.randomUUID().toString().substring(0, 8);
