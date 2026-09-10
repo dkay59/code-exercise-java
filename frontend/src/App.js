@@ -102,12 +102,9 @@ function App() {
               <td>{u.alias}</td>
               <td>{u.fullUrl}</td>
               <td>
-                <button
-                  className="btn btn-link"
-                  onClick={() => handleOpen(u.alias)}
-                >
+                <a href={u.shortUrl} target="_blank" rel="noreferrer">
                   {u.shortUrl}
-                </button>
+                </a>
               </td>
               <td>
                 <button
