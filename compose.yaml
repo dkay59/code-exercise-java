@@ -14,6 +14,8 @@ services:
       - ./frontend:/app
     stdin_open: true
     tty: true
+    networks:
+      - appnet
 
   app:
     build:
@@ -34,24 +36,24 @@ services:
       - appnet
 
   mysql:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: urlshortener
     ports:
-       - "3306:3306"
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - appnet
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
 
 networks:
   appnet:
