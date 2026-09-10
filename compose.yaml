@@ -15,25 +15,23 @@ services:
     stdin_open: true
     tty: true
 
-  springboot-app:
+  app:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     container_name: springboot-app
-    ports:
-      - "8081:8081"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx-proxy
-    ports:
-      - "8080:80"
     depends_on:
-      - react-app
-      - springboot-app
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/urlshortener?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpass
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    networks:
+      - appnet
 
   mysql:
     image: mysql:latest
@@ -49,6 +47,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - appnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 networks:
   appnet:

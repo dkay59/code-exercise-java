@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "/"
+  baseURL: "http://localhost:8080/"
 });
 
 // POST /shorten
